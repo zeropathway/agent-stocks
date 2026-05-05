@@ -30,9 +30,7 @@ log = logging.getLogger(__name__)
 
 _CACHE_DIR = Path(__file__).parent.parent / "data" / "cache"
 _CACHE_TTL = timedelta(minutes=30)
-# Sonnet 4.6 for thesis (runs on every ticker — cost-efficient)
-# Opus 4.7 is reserved for trade proposals in decision/proposer.py
-_MODEL = "claude-sonnet-4-6"
+_MODEL = "claude-opus-4-7"
 
 
 # ------------------------------------------------------------------

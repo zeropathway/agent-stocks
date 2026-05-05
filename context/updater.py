@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 load_dotenv()
 log = logging.getLogger(__name__)
 
-_MODEL        = "claude-sonnet-4-6"
+_MODEL        = "claude-opus-4-7"
 _CONTEXT_FILE = Path(__file__).parent / "market_context.md"
 
 _SYSTEM_PROMPT = """\

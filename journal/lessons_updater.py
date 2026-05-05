@@ -18,7 +18,7 @@ from journal.writer import get_recent_journals
 load_dotenv()
 log = logging.getLogger(__name__)
 
-_MODEL         = "claude-sonnet-4-6"
+_MODEL         = "claude-opus-4-7"
 _LESSONS_FILE  = Path(__file__).parent / "lessons.md"
 _N_JOURNALS    = 5
 
