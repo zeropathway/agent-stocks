@@ -228,7 +228,7 @@ class TestContextUpdater:
 
         assert len(result) > 100
         assert ctx_file.exists()
-        content = ctx_file.read_text()
+        content = ctx_file.read_text(encoding="utf-8")
         assert "# Market Context" in content
         assert "Last updated:" in content
         # Should mention at least one ticker
