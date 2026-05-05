@@ -57,13 +57,16 @@
 
 ---
 
-## Phase 7 — Routines + ClickUp Webhook
-- [ ] `routines/premarket.py` — full pre-market run: fetch data → research → propose trades
-- [ ] `routines/midday.py` — re-score open positions, manage stops, close underperformers
-- [ ] `routines/eod.py` — close remaining, journal, update lessons + context
-- [ ] `routines/scheduler.py` — local `schedule` loop wiring all three routines to ET times
-- [ ] Claude Code Routines config — cloud-scheduled triggers for each routine
-- [ ] ClickUp webhook: POST daily summary (P&L, trades taken, lessons) to a ClickUp task
+## Phase 7 — Routines + ClickUp Webhook ✅
+- [x] `routines/scheduler.py` — local 24/7 loop; weekday + holiday guard; clean SIGTERM shutdown; logs to scheduler.log
+- [x] `integrations/clickup.py` — POST daily summary task to ClickUp list (set CLICKUP_API_TOKEN + CLICKUP_LIST_ID in .env)
+- [x] ClickUp wired into EOD routine
+- [x] Git repo initialised + pushed: https://github.com/zeropathway/trading-agent (private)
+- [x] Three CCR routines created (disabled — enable after setting env vars in CCR environment):
+      - Pre-Market  → trig_014jmsN7Fz4Ey8RvCPpU2xH4  (08:00 ET / 12:00 UTC weekdays)
+      - Mid-Day     → trig_01Etj5vqjZGXaxugdKahvwm2   (12:30 ET / 16:30 UTC weekdays)
+      - End of Day  → trig_0137ThCgdGyjTspDosmo6NzV   (15:50 ET / 19:50 UTC weekdays)
+- [x] 119 tests passing (16 Phase 7 tests added)
 
 ---
 
