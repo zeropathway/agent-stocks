@@ -1,0 +1,42 @@
+# Environment & secrets — never commit
+.env
+.env.local
+.env.production
+# .env.example is intentionally NOT ignored (it's the template)
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Market data cache — large parquet files, regenerated on demand
+data/cache/
+
+# Journal trade files — personal trade records, not code
+journal/trades/
+
+# Generated output files — recreated each session
+proposed_trade.json
+execution_log.json
+scheduler.log
+
+# Python virtual envs
+venv/
+env/
+.venv/
+
+# Pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# VS Code / IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

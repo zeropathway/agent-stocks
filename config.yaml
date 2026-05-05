@@ -1,0 +1,60 @@
+trading:
+  live: false  # set to true ONLY when you want to flip to live — broker.py enforces this
+
+risk:
+  max_risk_per_trade: 0.01      # 1% of equity per trade (sized by ATR)
+  max_open_positions: 5
+  max_sector_exposure: 0.20     # 20% gross exposure per sector
+  daily_loss_limit: -0.03       # -3% of equity halts new entries for the session
+  allow_leverage: false
+  allow_options: false
+  allow_shorting: false
+
+sizing:
+  atr_period: 14                # ATR period for position sizing
+  atr_stop_multiplier: 2.0      # stop = entry - (ATR * multiplier)
+
+indicators:
+  rsi_period: 14
+  sma_fast: 20
+  sma_mid: 50
+  sma_slow: 200
+  macd_fast: 12
+  macd_slow: 26
+  macd_signal: 9
+
+alpaca:
+  paper_base_url: "https://paper-api.alpaca.markets"
+  live_base_url: "https://api.alpaca.markets"
+  data_base_url: "https://data.alpaca.markets"
+
+data:
+  cache_dir: "data/cache"
+  cache_ttl_minutes: 30
+
+journal:
+  dir: "journal/trades"
+  lessons_file: "journal/lessons.md"
+
+context:
+  market_context_file: "context/market_context.md"
+
+routines:
+  premarket_et: "08:00"
+  midday_et: "12:30"
+  eod_et: "15:50"
+
+clickup:
+  # Add CLICKUP_API_TOKEN and CLICKUP_LIST_ID to .env to enable daily summaries
+  enabled: true   # set false to skip ClickUp posting
+
+# Whitelisted domains for market data
+allowed_domains:
+  - "paper-api.alpaca.markets"
+  - "api.alpaca.markets"
+  - "data.alpaca.markets"
+  - "feeds.finance.yahoo.com"
+  - "finance.yahoo.com"
+  - "finviz.com"
+  - "api.polygon.io"
+  - "api.clickup.com"
