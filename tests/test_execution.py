@@ -134,7 +134,7 @@ class TestExecuteCancelled:
 
 
 class TestExecuteFilled:
-    def test_filled_result_has_correct_fields(self):
+    def test_filled_result_has_correct_fields(self, tmp_path):
         broker = _mock_broker()
         broker.get_orders.return_value = [{
             "id": "order-123", "symbol": "AAPL",
@@ -145,10 +145,12 @@ class TestExecuteFilled:
 
         executor = Executor(broker=broker)
 
-        # Patch stop placement to avoid real API call
+        import execution.executor as ex_mod
+        # Patch stop, journal stub AND exec log so no real files are written
         with patch.object(executor, "_place_stop", return_value="stop-456"):
             with patch.object(executor, "_write_journal_stub"):
-                result = executor.execute(_make_trade())
+                with patch.object(ex_mod, "_EXEC_LOG", tmp_path / "exec.json"):
+                    result = executor.execute(_make_trade())
 
         assert result.action == "filled"
         assert result.fill_price == 276.50
