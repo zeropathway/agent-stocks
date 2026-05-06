@@ -70,9 +70,23 @@
 
 ---
 
+---
+
+## Phase 8 — Backtesting Harness ✅
+- [x] `backtest/historical.py` — yfinance data fetcher (25 years free daily OHLCV), parquet cache
+- [x] `backtest/engine.py` — bar-by-bar simulator; reuses indicators + scorer; no look-ahead bias
+  - Entry at T+1 open after signal on close of T; stop/target checked from T+2 via intraday H/L
+  - ATR-based sizing (1% risk/trade, 2× ATR stop, 1.5× R/R target) — mirrors live system
+  - Rule-based thesis (no Claude API calls → fast and free)
+- [x] `backtest/metrics.py` — CAGR, Sharpe, Sortino, Calmar, max drawdown, win rate, profit factor, avg R
+- [x] `backtest/report.py` — Markdown + JSON report to `backtest/results/`
+- [x] `run_backtest.py` — CLI entry point (`python run_backtest.py --years 20 --equity 100000`)
+- [x] 25 backtest tests added
+
+---
+
 ## Future / Backlog
 - [ ] Crypto venue via `ccxt` (Coinbase or Kraken)
 - [ ] Options flow scanner (Phase 2+ only, requires config flag)
-- [ ] Backtesting harness against historical parquet data
 - [ ] Slack/Telegram alert channel for fills and halt events
 - [ ] Live trading flip (after 30-day paper track record)
