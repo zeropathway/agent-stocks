@@ -137,7 +137,7 @@ class Executor:
                 from alpaca.trading.client import TradingClient
                 import os
                 from dotenv import load_dotenv
-                load_dotenv()
+                load_dotenv(Path(__file__).resolve().parent.parent / ".env")
                 import yaml
                 cfg_path = Path(__file__).parent.parent / "config.yaml"
                 cfg = yaml.safe_load(open(cfg_path))
@@ -243,13 +243,24 @@ class Executor:
                 generated_at=datetime.now(tz=timezone.utc).isoformat(),
             )
 
-        # Submit entry order (limit at proposed entry price)
+        # Refresh limit price from live quote — proposed entry may be hours old.
+        # If market has moved above proposal, chase up to 1% above current mid.
+        # This prevents the "order sits unfilled then cancels" pattern.
+        limit_price = trade.entry_price
+        live_price = self.broker.get_latest_price(trade.symbol)
+        if live_price and live_price > trade.entry_price:
+            limit_price = round(live_price * 1.005, 2)   # 0.5% above current mid
+            log.info(
+                "Live price $%.2f > proposed $%.2f — refreshing limit to $%.2f",
+                live_price, trade.entry_price, limit_price,
+            )
+
         order = self.broker.submit_order(
             symbol=trade.symbol,
             qty=float(trade.qty),
             side="buy",
             order_type="limit",
-            limit_price=trade.entry_price,
+            limit_price=limit_price,
             time_in_force="day",
         )
         if order is None:

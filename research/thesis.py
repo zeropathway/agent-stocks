@@ -24,7 +24,7 @@ from dotenv import load_dotenv
 from research.news import Headline, headlines_to_text
 from research.earnings import EarningsInfo, earnings_to_text
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 log = logging.getLogger(__name__)
 

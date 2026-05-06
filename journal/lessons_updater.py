@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 
 from journal.writer import get_recent_journals
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 log = logging.getLogger(__name__)
 
 _MODEL         = "claude-opus-4-7"

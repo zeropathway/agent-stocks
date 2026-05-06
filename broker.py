@@ -8,6 +8,7 @@ import os
 import uuid
 import logging
 from datetime import date, datetime
+from pathlib import Path
 from typing import Optional
 from zoneinfo import ZoneInfo
 
@@ -19,7 +20,7 @@ from alpaca.trading.enums import OrderSide, TimeInForce, OrderStatus
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.requests import StockLatestQuoteRequest
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parent / ".env")
 
 log = logging.getLogger(__name__)
 

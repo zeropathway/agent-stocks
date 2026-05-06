@@ -48,6 +48,7 @@ def _mock_broker(
     broker.get_equity.return_value = equity
     broker.get_positions.return_value = positions or []
     broker.get_position.return_value = None
+    broker.get_latest_price.return_value = 276.00   # matches entry_price default
     broker.submit_order.return_value = {
         "id": "order-123",
         "client_order_id": "agent-AAPL-test",

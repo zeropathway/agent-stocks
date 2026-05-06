@@ -28,7 +28,7 @@ from typing import Optional
 import requests
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 log = logging.getLogger(__name__)
 
 _CLICKUP_BASE = "https://api.clickup.com/api/v2"

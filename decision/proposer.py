@@ -23,7 +23,7 @@ from dotenv import load_dotenv
 from decision.scorer import ScoreDetail
 from research.thesis import Thesis
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 log = logging.getLogger(__name__)
 
 _MODEL_SONNET = "claude-sonnet-4-6"
