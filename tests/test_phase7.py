@@ -75,8 +75,22 @@ class TestScheduler:
     def test_schedule_has_three_jobs(self):
         import schedule as sched
         import routines.scheduler  # ensures module-level schedule.every() calls ran
-        jobs = sched.jobs
-        assert len(jobs) >= 3, f"Expected at least 3 scheduled jobs, got {len(jobs)}"
+        assert len(sched.jobs) >= 3, f"Expected at least 3 scheduled jobs, got {len(sched.jobs)}"
+
+    def test_et_hhmm_to_local_returns_hhmm(self):
+        from routines.scheduler import _et_hhmm_to_local
+        result = _et_hhmm_to_local("08:00")
+        parts = result.split(":")
+        assert len(parts) == 2
+        assert parts[0].isdigit() and parts[1].isdigit()
+        assert 0 <= int(parts[0]) <= 23
+        assert 0 <= int(parts[1]) <= 59
+
+    def test_holidays_2027_present(self):
+        from routines.scheduler import _HOLIDAYS
+        from datetime import date
+        assert date(2027, 1, 1) in _HOLIDAYS    # New Year's Day 2027
+        assert date(2027, 12, 24) in _HOLIDAYS  # Christmas 2027
 
 
 # ------------------------------------------------------------------

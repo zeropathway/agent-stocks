@@ -6,7 +6,7 @@ Phase 6: detects closed positions, writes full journals, updates lessons.md and 
 import json
 import logging
 import sys
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -39,6 +39,19 @@ def _detect_exits(broker: Broker) -> list[ExitEvent]:
     try:
         last = json.loads(_EXEC_LOG.read_text(encoding="utf-8"))
     except Exception:
+        return []
+
+    # Only process logs from today — reject stale entries from previous sessions
+    generated_at = last.get("generated_at", "")
+    try:
+        from datetime import timezone as _tz
+        log_date = datetime.fromisoformat(generated_at).astimezone(_tz.utc).date()
+    except Exception:
+        log_date = None
+    if log_date != date.today():
+        log.info(
+            "execution_log.json is from %s — skipping stale exit detection", log_date
+        )
         return []
 
     symbol = last.get("symbol")

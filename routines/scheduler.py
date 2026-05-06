@@ -1,7 +1,10 @@
 """
 Local 24/7 scheduler — runs all three routines at their ET times.
-Use this as a fallback / local dev runner. Production uses Claude Code Routines
-(see .claude/routines/ config files).
+
+The `schedule` library uses the machine's local wall clock, NOT timezones.
+_et_hhmm_to_local() converts each ET target time to the machine's local time
+at startup so routines fire at the correct moment regardless of where the
+machine is located (Norway, US, anywhere).
 
 Usage:
     python routines/scheduler.py
@@ -40,33 +43,67 @@ _STOP = False
 
 
 # ------------------------------------------------------------------
-# Market holiday list (US) — extend annually
+# Timezone conversion — ET → machine local time
 # ------------------------------------------------------------------
+
+def _et_hhmm_to_local(et_hhmm: str) -> str:
+    """
+    Convert a HH:MM clock time in US/Eastern to the machine's local HH:MM.
+    Called once at startup so DST is handled correctly for today.
+    The scheduler should be restarted on DST transition days (twice a year).
+    """
+    h, m = map(int, et_hhmm.split(":"))
+    target_et = datetime.now(tz=ET).replace(hour=h, minute=m, second=0, microsecond=0)
+    local = target_et.astimezone()
+    local_hhmm = local.strftime("%H:%M")
+    log.info("Scheduled %s ET → %s %s (local)", et_hhmm, local_hhmm, local.strftime("%Z"))
+    return local_hhmm
+
+
+# ------------------------------------------------------------------
+# Market holiday list (US)
+# ------------------------------------------------------------------
+
 _HOLIDAYS_2026 = {
-    date(2026, 1, 1),   # New Year's Day
-    date(2026, 1, 19),  # MLK Day
-    date(2026, 2, 16),  # Presidents' Day
-    date(2026, 4, 3),   # Good Friday
-    date(2026, 5, 25),  # Memorial Day
-    date(2026, 7, 3),   # Independence Day (observed)
-    date(2026, 9, 7),   # Labor Day
-    date(2026, 11, 26), # Thanksgiving
-    date(2026, 11, 27), # Day after Thanksgiving (early close — treat as holiday)
-    date(2026, 12, 25), # Christmas
+    date(2026, 1, 1),    # New Year's Day
+    date(2026, 1, 19),   # MLK Day
+    date(2026, 2, 16),   # Presidents' Day
+    date(2026, 4, 3),    # Good Friday
+    date(2026, 5, 25),   # Memorial Day
+    date(2026, 7, 3),    # Independence Day (observed)
+    date(2026, 9, 7),    # Labor Day
+    date(2026, 11, 26),  # Thanksgiving
+    date(2026, 11, 27),  # Day after Thanksgiving
+    date(2026, 12, 25),  # Christmas
 }
+
+_HOLIDAYS_2027 = {
+    date(2027, 1, 1),    # New Year's Day
+    date(2027, 1, 18),   # MLK Day
+    date(2027, 2, 15),   # Presidents' Day
+    date(2027, 3, 26),   # Good Friday
+    date(2027, 5, 31),   # Memorial Day
+    date(2027, 7, 5),    # Independence Day (observed)
+    date(2027, 9, 6),    # Labor Day
+    date(2027, 11, 25),  # Thanksgiving
+    date(2027, 11, 26),  # Day after Thanksgiving
+    date(2027, 12, 24),  # Christmas (observed)
+}
+
+_HOLIDAYS: set[date] = _HOLIDAYS_2026 | _HOLIDAYS_2027
 
 
 def _is_trading_day() -> bool:
     now = datetime.now(tz=ET)
-    if now.weekday() >= 5:   # Saturday=5, Sunday=6
+    if now.weekday() >= 5:          # Saturday=5, Sunday=6
         return False
-    if now.date() in _HOLIDAYS_2026:
+    if now.date() in _HOLIDAYS:
         return False
     return True
 
 
 def _run_guarded(name: str, fn):
-    """Run a routine function, guarding against exceptions and non-trading days."""
+    """Run a routine, guarding against exceptions and non-trading days."""
     if not _is_trading_day():
         log.info("Skipping %s — not a trading day", name)
         return
@@ -94,12 +131,12 @@ def _eod():
 
 
 # ------------------------------------------------------------------
-# Schedule wiring (all times in ET)
+# Schedule wiring — convert ET times to machine local time
 # ------------------------------------------------------------------
 
-schedule.every().day.at("08:00").do(_premarket)
-schedule.every().day.at("12:30").do(_midday)
-schedule.every().day.at("15:50").do(_eod)
+schedule.every().day.at(_et_hhmm_to_local("08:00")).do(_premarket)
+schedule.every().day.at(_et_hhmm_to_local("12:30")).do(_midday)
+schedule.every().day.at(_et_hhmm_to_local("15:50")).do(_eod)
 
 
 def _handle_signal(signum, frame):
@@ -113,11 +150,13 @@ signal.signal(signal.SIGINT, _handle_signal)
 
 
 def run():
-    log.info("Scheduler started — routines: premarket@08:00, midday@12:30, EOD@15:50 ET")
+    log.info(
+        "Scheduler started — routines: premarket@08:00, midday@12:30, EOD@15:50 ET"
+    )
     log.info("Press Ctrl-C to stop")
     while not _STOP:
         schedule.run_pending()
-        time.sleep(30)   # check every 30s — fine-grained enough for minute-level jobs
+        time.sleep(30)
     log.info("Scheduler stopped")
 
 

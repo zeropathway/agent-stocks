@@ -6,7 +6,7 @@ Run: pytest tests/test_decision.py -v
 
 import json
 import sys
-from datetime import date
+from datetime import date, datetime, timezone, timedelta
 from pathlib import Path
 from unittest.mock import patch
 
@@ -252,6 +252,47 @@ class TestProposer:
         with patch.dict("os.environ", {"ANTHROPIC_API_KEY": ""}):
             result = propose_trade("AAPL", BULL_SIGNAL, thesis, detail, 100_000)
         assert result is None
+
+    def test_load_proposal_rejects_stale(self, tmp_path):
+        """load_proposal() must reject proposals older than 6 hours."""
+        from decision.proposer import load_proposal, _TRADE_FILE
+        from datetime import datetime, timezone, timedelta
+
+        stale_trade = {
+            "symbol": "AAPL", "action": "buy", "qty": 10,
+            "entry_price": 276.0, "stop_price": 262.0, "target_price": 303.0,
+            "risk_reward": 1.93, "rationale": "Old trade.", "score": 7.5,
+            "conviction": 4, "thesis_sentiment": "bullish",
+            "model_used": "claude-sonnet-4-6",
+            "generated_at": (datetime.now(tz=timezone.utc) - timedelta(hours=10)).isoformat(),
+        }
+        stale_file = tmp_path / "proposed_trade.json"
+        stale_file.write_text(json.dumps(stale_trade))
+
+        with patch("decision.proposer._TRADE_FILE", stale_file):
+            result = load_proposal()
+        assert result is None
+
+    def test_load_proposal_accepts_fresh(self, tmp_path):
+        """load_proposal() must accept proposals less than 6 hours old."""
+        from decision.proposer import load_proposal
+        from datetime import datetime, timezone, timedelta
+
+        fresh_trade = {
+            "symbol": "AMD", "action": "buy", "qty": 30,
+            "entry_price": 355.0, "stop_price": 322.0, "target_price": 410.0,
+            "risk_reward": 1.66, "rationale": "Fresh trade.", "score": 8.0,
+            "conviction": 4, "thesis_sentiment": "bullish",
+            "model_used": "claude-opus-4-7",
+            "generated_at": (datetime.now(tz=timezone.utc) - timedelta(hours=2)).isoformat(),
+        }
+        fresh_file = tmp_path / "proposed_trade.json"
+        fresh_file.write_text(json.dumps(fresh_trade))
+
+        with patch("decision.proposer._TRADE_FILE", fresh_file):
+            result = load_proposal()
+        assert result is not None
+        assert result.symbol == "AMD"
 
     def test_propose_trade_uses_opus_for_conviction_5(self):
         """Model selection: conviction 5 → Opus."""

@@ -173,6 +173,45 @@ class Broker:
             log.error("Failed to close position %s: %s", symbol, e)
             return False
 
+    def move_stop(self, symbol: str, qty: float, new_stop: float) -> bool:
+        """
+        Replace the GTC stop-loss for a position.
+        Cancels all open GTC sell-stop orders for the symbol, then places
+        a new one at new_stop. Returns True on success.
+        """
+        from alpaca.trading.requests import StopOrderRequest
+        from alpaca.trading.enums import OrderSide, TimeInForce
+
+        # Cancel existing stop orders for this symbol
+        try:
+            orders = self.get_orders(status="open")
+            for o in orders:
+                if (o["symbol"] == symbol and o["side"] == "sell"
+                        and "stop" in o.get("type", "")):
+                    self.cancel_order(o["id"])
+                    log.info("Cancelled old stop order %s for %s", o["id"], symbol)
+        except Exception as e:
+            log.error("Failed to cancel existing stops for %s: %s", symbol, e)
+
+        # Place new stop
+        try:
+            req = StopOrderRequest(
+                symbol=symbol,
+                qty=qty,
+                side=OrderSide.SELL,
+                time_in_force=TimeInForce.GTC,
+                stop_price=round(new_stop, 2),
+            )
+            order = self._client.submit_order(req)
+            log.info(
+                "Stop moved: %s qty=%.0f new_stop=$%.2f id=%s",
+                symbol, qty, new_stop, order.id,
+            )
+            return True
+        except Exception as e:
+            log.error("Failed to place new stop for %s at $%.2f: %s", symbol, new_stop, e)
+            return False
+
     # ------------------------------------------------------------------
     # Pre-trade checklist — fails closed
     # ------------------------------------------------------------------

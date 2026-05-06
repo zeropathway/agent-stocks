@@ -22,6 +22,10 @@ proposed_trade.json
 execution_log.json
 scheduler.log
 
+# Backtest reports — large generated files, not code
+backtest/results/*.md
+backtest/results/*.json
+
 # Python virtual envs
 venv/
 env/

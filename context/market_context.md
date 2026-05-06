@@ -1,51 +1,35 @@
 # Market Context
 
-> Last updated: 2026-05-05 15:15 UTC by context/updater.py
+> Last updated: 2026-05-06 13:50 UTC by context/updater.py
 
-# Market Context Briefing — Pre-Market | 2025-05-06
-
----
+# Market Context Briefing — 2026-05-07
 
 ## 1. Regime
-**Risk-On.** Breadth is overwhelmingly bullish at 12/16 (75%), with SPY at $723.55 and QQQ at $681.42 both trading above their 200-day MAs and pushing into overbought RSI territory (71 and 76 respectively). The broad participation across large-cap tech, financials, healthcare, and energy confirms genuine risk appetite rather than a narrow rotation.
+**Risk-on, but stretched.** Breadth is overwhelmingly bullish (13/16) with indices, semis, megacap tech, financials, and healthcare all above their 200-day SMAs; however, RSI readings are in extreme territory (QQQ 79, GOOGL 83, AMD 81, AMZN 81), signaling trend exhaustion risk rather than a reversal yet.
 
----
+## 2. Leading sectors
+- **Megacap Tech ex-MSFT/META:** GOOGL (RSI 83), AMZN (81), AAPL (67)
+- **Semiconductors:** AMD (RSI 81) leading; NVDA (56) lagging the group, room to run
+- **Healthcare:** UNH (RSI 76), LLY (62) — both confirming above 200SMA
+- **Financials:** JPM (59), GS (60) — healthy, non-overbought trends
+- **Small caps:** IWM (RSI 71) participating — broad risk appetite
 
-## 2. Leading Sectors
-- **Mega-Cap Tech (ex-META):** GOOGL ($388.59, RSI=81), AMZN ($275.29, RSI=81), AMD ($351.98, RSI=72) — momentum leaders
-- **Healthcare:** UNH ($363.63, RSI=74), LLY ($981.02, RSI=61) — sustained institutional accumulation
-- **Financials:** GS ($919.74, RSI=55) — bullish with room to run, not yet overbought
-- **Energy:** XOM ($153.76, RSI=51) — early-stage breakout, low-risk entry window
+## 3. Lagging sectors
+- **Software megacap:** MSFT ($407.29, RSI 50, below 200SMA) and META ($600.83, RSI 39, below 200SMA) — clear divergence vs. peers
+- **Energy:** XOM ($149.46, RSI 44) drifting, neutral
 
----
+## 4. Key risks
+- **Overbought mean reversion:** QQQ RSI 79, GOOGL 83, AMD 81, AMZN 81 — any single catalyst could trigger 2–4% pullback in leaders.
+- **Tech bifurcation:** MSFT/META failing while peers extend; if leadership rolls down to join laggards rather than laggards catching up, the index thesis cracks.
+- **SPY $729 / QQQ $690 extension:** No nearby support; first test would be 20-EMA, likely 3–5% lower.
+- **XOM weakness** as a tell on global growth/demand if it breaks below 200SMA.
 
-## 3. Lagging Sectors
-- **Social Media / Comm Services:** META ($602.75, RSI=39, below 200MA) — sole bearish signal, distribution pattern
-- **Semiconductors (selective):** NVDA ($197.74, RSI=52, neutral) — stalling despite strong sector peers
-- **Large-Cap Software:** MSFT ($410.33, RSI=52, below 200MA) — neutral, structural weakness vs. peers
+## 5. Watchlist notes
+- **NVDA ($201.86, RSI 56):** Cleanest setup — trending, above 200SMA, *not* overbought. Matches the AAPL trifecta lesson (price>SMA200 + RSI 60-65 zone on pullback).
+- **TSLA ($390.27, RSI 55, below 200SMA):** Bias flagged bullish but 200SMA not reclaimed — wait for confirmation, do not front-run.
+- **GOOGL ($396.67, RSI 83):** Do not chase; await pullback to 20-EMA before adding.
+- **MSFT ($407.29):** Avoid longs; potential short candidate if it loses $400 with RSI rolling under 45.
+- **JPM/GS:** RSI 59/60 — textbook mid-trend entries if they hold today's lows.
 
----
-
-## 4. Key Risks
-1. **Overbought Exhaustion:** QQQ RSI=76, GOOGL/AMZN both at RSI=81 — mean-reversion risk is elevated; any macro catalyst could trigger rapid unwind
-2. **META Contagion:** META below 200MA with RSI=39 could drag Communication Services broadly; watch for spillover into GOOGL if META selling accelerates
-3. **MSFT Lagging Divergence:** Second-largest QQQ component trading below 200MA (RSI=52) is a structural warning — QQQ rally may be narrower than it appears
-4. **TSLA Below 200MA:** Bullish bias but price ($392.36) remains below 200MA — false breakout risk if broader momentum fades; confirm with volume before adding exposure
-
----
-
-## 5. Watchlist Notes
-- **GOOGL $388.59 | RSI=81:** Technically extended — do NOT initiate new longs here; target pullback entry toward $370–$375 with RSI reset to ~65
-- **META $602.75 | RSI=39:** Approaching oversold threshold; watch for RSI confirmation cross above 40 + reclaim of $610 as potential mean-reversion long trigger — not yet
-- **LLY $981.02 | RSI=61:** Clean setup matching the AAPL confirmation template (RSI sub-overbought, above 200MA, bullish bias) — priority long candidate on any intraday dip toward $970
-- **GS $919.74 | RSI=55:** Room to run before overbought; above 200MA with muted RSI — favorable risk/reward for long entry on open strength confirmation
-- **XOM $153.76 | RSI=51:** Low RSI with bullish bias and 200MA support — energy as a hedge against risk-off scenario; valid diversifier in current regime
-
----
-
-## 6. Bias for Tomorrow
-**Bullish — with overbought caution.**
-Breadth and trend confirm risk-on, but RSI extremes in QQQ/GOOGL/AMZN demand selective entries on pullbacks rather than chasing opens; favor LLY and GS as the cleanest setups with momentum and RSI headroom.
-
----
-*Session P&L: +$38.30 | Scanned: 16 | Bullish: 12 | Bearish: 1 | Neutral: 3*
+## 6. Bias for tomorrow
+**Neutral-to-bullish.** Trend and breadth favor longs, but extreme RSI in leaders argues for selectivity — favor non-overbought participants (NVDA, JPM, GS, LLY) over chasing extended names.

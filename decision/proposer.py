@@ -261,7 +261,17 @@ def load_proposal() -> Optional[ProposedTrade]:
     if not _TRADE_FILE.exists():
         return None
     try:
-        return ProposedTrade.from_dict(json.loads(_TRADE_FILE.read_text()))
+        trade = ProposedTrade.from_dict(json.loads(_TRADE_FILE.read_text()))
+        # Reject proposals older than 6 hours — prevents re-executing yesterday's trade
+        generated = datetime.fromisoformat(trade.generated_at)
+        age_hours = (datetime.now(tz=timezone.utc) - generated).total_seconds() / 3600
+        if age_hours > 6:
+            log.warning(
+                "Proposal for %s is %.1fh old — ignoring stale proposed_trade.json",
+                trade.symbol, age_hours,
+            )
+            return None
+        return trade
     except Exception as e:
         log.error("Failed to load proposed_trade.json: %s", e)
         return None
