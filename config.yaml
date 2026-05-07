@@ -9,6 +9,8 @@ risk:
   allow_leverage: false
   allow_options: false
   allow_shorting: false
+  min_score: 6.5                # minimum signal score to propose a trade (raised from 5.0)
+  rsi_hard_cap: 70.0            # never enter above this RSI (lowered from 80)
 
 sizing:
   atr_period: 14                # ATR period for position sizing

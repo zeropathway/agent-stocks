@@ -23,11 +23,11 @@ class RuleResult:
 
 
 # Minimum score to even consider a trade
-_MIN_SCORE_BUY  =  5.0
+_MIN_SCORE_BUY  =  6.5   # raised: backtest shows better Sharpe/PF at 6.5 vs 5.0
 _MIN_SCORE_SELL = -5.0   # reserved for future short support
 
-# RSI hard ceiling — never buy into extreme overbought
-_RSI_OVERBOUGHT_HARD = 80.0
+# RSI hard ceiling — never buy into overbought territory
+_RSI_OVERBOUGHT_HARD = 70.0  # lowered: avoid chasing extended moves (was 80)
 
 # Earnings blackout window (days)
 _EARNINGS_BLACKOUT_DAYS = 3

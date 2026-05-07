@@ -41,9 +41,9 @@ MAX_POSITIONS        = 5
 MAX_RISK_PER_TRADE   = 0.01   # 1% of equity
 ATR_STOP_MULT        = 2.0
 MIN_RR               = 1.5
-MIN_SCORE            = 5.0
-RSI_HARD_CAP         = 80.0
-MIN_BARS             = 220    # need ≥200 for SMA-200 + buffer
+MIN_SCORE            = 6.5    # raised from 5.0 — backtest shows better Sharpe/profit factor
+RSI_HARD_CAP         = 70.0   # lowered from 80 — avoid overbought entries
+MIN_BARS             = 250    # raised from 220 — more reliable indicator warmup
 
 _DUMMY_EARNINGS = EarningsInfo(symbol="BACKTEST")   # no earnings risk in backtest
 
